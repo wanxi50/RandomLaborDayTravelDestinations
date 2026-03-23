@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
+import textConfig from '../data/text-config.json';
 
-/**
- * AI 生成目的地介绍页
- * 流式展示文字，打字机效果
- */
+const T = textConfig.destinationIntro;
+
 export default function DestinationIntro({ province, city, onNext }) {
   const [text, setText] = useState('');
   const [loading, setLoading] = useState(true);
@@ -21,9 +20,7 @@ export default function DestinationIntro({ province, city, onNext }) {
           signal: controller.signal,
         });
 
-        if (!response.ok) {
-          throw new Error('AI 服务暂时不可用');
-        }
+        if (!response.ok) throw new Error(T.errorFallback);
 
         const reader = response.body.getReader();
         const decoder = new TextDecoder();
@@ -42,12 +39,8 @@ export default function DestinationIntro({ province, city, onNext }) {
               try {
                 const parsed = JSON.parse(line.slice(6));
                 const content = parsed.choices?.[0]?.delta?.content;
-                if (content) {
-                  setText((prev) => prev + content);
-                }
-              } catch {
-                // 跳过无法解析的行
-              }
+                if (content) setText((prev) => prev + content);
+              } catch {}
             }
           }
         }
@@ -68,34 +61,31 @@ export default function DestinationIntro({ province, city, onNext }) {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-6">
       <div className="max-w-lg w-full animate-fade-in-up">
-        <h2 className="text-2xl font-bold text-gray-700 text-center mb-2">
-          我带你去
-        </h2>
-        <h1 className="text-3xl font-bold text-pink-500 text-center mb-8">
+        <h2 className="text-2xl font-bold text-gray-700 text-center mb-2">{T.heading}</h2>
+        <h1 className="text-3xl font-bold text-center mb-8" style={{ color: '#7ab678' }}>
           {province} {city}
         </h1>
 
-        {/* AI 生成的介绍文字 */}
         <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 shadow-sm min-h-[160px]">
           {error ? (
             <p className="text-red-400 text-center">{error}</p>
           ) : (
-            <p
-              className={`text-gray-600 leading-relaxed whitespace-pre-wrap ${loading ? 'typing-cursor' : ''}`}
-            >
-              {text || (loading ? '正在为你写一段话...' : '')}
+            <p className={`text-gray-600 leading-relaxed whitespace-pre-wrap ${loading ? 'typing-cursor' : ''}`}>
+              {text || (loading ? T.loading : '')}
             </p>
           )}
         </div>
 
-        {/* 继续按钮 - 加载完成后显示 */}
         {!loading && !error && (
           <div className="text-center mt-8 animate-fade-in">
             <button
               onClick={onNext}
-              className="px-6 py-2 bg-pink-400 hover:bg-pink-500 text-white rounded-full shadow-md transition-colors"
+              className="px-6 py-2 text-white rounded-full shadow-md transition-colors"
+              style={{ backgroundColor: '#a58ac7' }}
+              onMouseEnter={(e) => (e.target.style.backgroundColor = '#8f74b3')}
+              onMouseLeave={(e) => (e.target.style.backgroundColor = '#a58ac7')}
             >
-              看看出发倒计时
+              {T.nextButton}
             </button>
           </div>
         )}

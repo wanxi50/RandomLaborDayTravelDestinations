@@ -1,0 +1,36 @@
+{
+  "chinaMap": {
+    "title": "第一步：抽省份",
+    "subtitle": "点击按钮，在地图上随机选出目的地省份",
+    "spinButton": "随机选省",
+    "spinning": "选择中...",
+    "retryButton": "再转一次（剩{n}次）",
+    "confirmButton": "就是这里了!",
+    "confirmed": "我们要去 {province}!"
+  },
+  "provinceMap": {
+    "title": "第二步：抽城市",
+    "subtitle": "你选中了 {province}，再选出目的地城市吧",
+    "spinButton": "随机选市",
+    "spinning": "选择中...",
+    "resultLocked": "目的地锁定",
+    "resultText": "{province} {city}",
+    "continueButton": "就去这里!"
+  },
+  "destinationIntro": {
+    "heading": "我带你去",
+    "loading": "正在为你写一段话...",
+    "errorFallback": "AI 服务暂时不可用",
+    "nextButton": "看看出发倒计时"
+  },
+  "countdown": {
+    "topMessage": "我们的五一旅行即将出发!",
+    "destination": "目的地：{province} {city}",
+    "countdownLabel": "距离 2026 年 5 月 1 日出发还有",
+    "units": { "days": "天", "hours": "时", "minutes": "分", "seconds": "秒" },
+    "footer": "这是我给你准备的五一小惊喜"
+  },
+  "common": {
+    "mapLoading": "地图加载中..."
+  }
+}

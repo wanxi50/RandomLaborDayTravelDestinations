@@ -1,6 +1,7 @@
 import express from 'express';
 import { fileURLToPath } from 'url';
 import path from 'path';
+import fs from 'fs';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -10,6 +11,66 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
+
+// ============ 持久化存储 ============
+const DATA_DIR = path.join(__dirname, '../data');
+const STATE_FILE = path.join(DATA_DIR, 'state.json');
+
+// 确保 data 目录存在
+if (!fs.existsSync(DATA_DIR)) {
+  fs.mkdirSync(DATA_DIR, { recursive: true });
+}
+
+function readState() {
+  if (!fs.existsSync(STATE_FILE)) {
+    return { currentStep: 'province', province: null, city: null, records: [] };
+  }
+  return JSON.parse(fs.readFileSync(STATE_FILE, 'utf-8'));
+}
+
+function writeState(state) {
+  fs.writeFileSync(STATE_FILE, JSON.stringify(state, null, 2), 'utf-8');
+}
+
+// 获取当前状态
+app.get('/api/state', (req, res) => {
+  res.json(readState());
+});
+
+// 更新当前状态（省/市选择、步骤切换）
+app.put('/api/state', (req, res) => {
+  const current = readState();
+  const updated = { ...current, ...req.body };
+  writeState(updated);
+  res.json(updated);
+});
+
+// 添加一条抽奖记录
+app.post('/api/records', (req, res) => {
+  const state = readState();
+  const record = {
+    id: Date.now(),
+    timestamp: new Date().toISOString(),
+    ...req.body,
+  };
+  state.records.push(record);
+  writeState(state);
+  res.json(record);
+});
+
+// 获取所有抽奖记录
+app.get('/api/records', (req, res) => {
+  const state = readState();
+  res.json(state.records);
+});
+
+// 重置状态（重新开始）
+app.post('/api/reset', (req, res) => {
+  const state = readState();
+  const reset = { currentStep: 'province', province: null, city: null, records: state.records };
+  writeState(reset);
+  res.json(reset);
+});
 
 // 生产环境 serve 前端静态文件
 app.use(express.static(path.join(__dirname, '../dist')));
