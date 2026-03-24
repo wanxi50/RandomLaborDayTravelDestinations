@@ -14,7 +14,10 @@ COPY package.json package-lock.json ./
 RUN npm ci --omit=dev
 
 COPY server/ ./server/
+COPY src/data/text-config.json ./src/data/text-config.json
 COPY --from=builder /app/dist ./dist/
+
+RUN mkdir -p /app/data
 
 EXPOSE 3000
 

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import Markdown from 'react-markdown';
 import textConfig from '../data/text-config.json';
 
 const T = textConfig.destinationIntro;
@@ -70,9 +71,9 @@ export default function DestinationIntro({ province, city, onNext }) {
           {error ? (
             <p className="text-red-400 text-center">{error}</p>
           ) : (
-            <p className={`text-gray-600 leading-relaxed whitespace-pre-wrap ${loading ? 'typing-cursor' : ''}`}>
-              {text || (loading ? T.loading : '')}
-            </p>
+            <div className={`text-gray-600 leading-relaxed prose prose-sm max-w-none ${loading ? 'typing-cursor' : ''}`}>
+              {text ? <Markdown>{text}</Markdown> : (loading ? <p>{T.loading}</p> : null)}
+            </div>
           )}
         </div>
 

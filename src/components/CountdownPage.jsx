@@ -59,7 +59,7 @@ export default function CountdownPage({ province, city }) {
           <TimeBlock value={timeLeft.seconds} label={T.units.seconds} />
         </div>
 
-        <p className="text-sm text-gray-300">{T.footer}</p>
+        <p className="text-sm text-gray-500">{T.footer}</p>
       </div>
     </div>
   );

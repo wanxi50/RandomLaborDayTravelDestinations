@@ -139,7 +139,7 @@ export default function ProvinceMap({ province, onConfirm }) {
         {T.subtitle.split('{province}')[1]}
       </p>
 
-      <div ref={chartRef} style={{ width: '100%', maxWidth: '600px', height: '460px' }} />
+      <div ref={chartRef} style={{ width: '100%', maxWidth: '1000px', height: '80vh' }} />
 
       <div className="mt-4 h-32 flex flex-col items-center justify-start">
         {!result && !spinning && (
