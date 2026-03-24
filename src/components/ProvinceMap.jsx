@@ -39,7 +39,7 @@ export default function ProvinceMap({ province, onConfirm }) {
 
   useEffect(() => {
     if (!adcode) return;
-    fetch(`https://geo.datav.aliyun.com/areas_v3/bound/${adcode}_full.json`)
+    fetch(`/geo/${adcode}.json`)
       .then((res) => res.json())
       .then((geoJson) => {
         const mapName = `province_${adcode}`;

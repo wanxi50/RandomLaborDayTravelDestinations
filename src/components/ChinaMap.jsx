@@ -56,7 +56,7 @@ export default function ChinaMap({ onConfirm }) {
   const animTimer = useRef(null);
 
   useEffect(() => {
-    fetch('https://geo.datav.aliyun.com/areas_v3/bound/100000_full.json')
+    fetch('/geo/china.json')
       .then((res) => res.json())
       .then((geoJson) => {
         geoJson.features.forEach((f) => {
